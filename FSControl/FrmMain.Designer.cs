@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.BtnPowerOn = new System.Windows.Forms.Button();
             this.BtnPowerOff = new System.Windows.Forms.Button();
@@ -36,7 +37,15 @@
             this.TxtOutput = new System.Windows.Forms.TextBox();
             this.BtnToggleAll = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toggleAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.powerOnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.powerOffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sundayStageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // BtnPowerOn
@@ -109,6 +118,58 @@
             this.label1.TabIndex = 6;
             this.label1.Text = "Use if clicking Power doesn\'t work correctly";
             // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "FreeStyler Control";
+            this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toggleAllToolStripMenuItem,
+            this.powerOnToolStripMenuItem,
+            this.powerOffToolStripMenuItem,
+            this.sundayStageToolStripMenuItem,
+            this.exitToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 136);
+            // 
+            // toggleAllToolStripMenuItem
+            // 
+            this.toggleAllToolStripMenuItem.Name = "toggleAllToolStripMenuItem";
+            this.toggleAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.toggleAllToolStripMenuItem.Text = "Toggle All";
+            this.toggleAllToolStripMenuItem.Click += new System.EventHandler(this.toggleAllToolStripMenuItem_Click);
+            // 
+            // powerOnToolStripMenuItem
+            // 
+            this.powerOnToolStripMenuItem.Name = "powerOnToolStripMenuItem";
+            this.powerOnToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.powerOnToolStripMenuItem.Text = "Power On";
+            this.powerOnToolStripMenuItem.Click += new System.EventHandler(this.powerOnToolStripMenuItem_Click);
+            // 
+            // powerOffToolStripMenuItem
+            // 
+            this.powerOffToolStripMenuItem.Name = "powerOffToolStripMenuItem";
+            this.powerOffToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.powerOffToolStripMenuItem.Text = "Power Off";
+            this.powerOffToolStripMenuItem.Click += new System.EventHandler(this.powerOffToolStripMenuItem_Click);
+            // 
+            // sundayStageToolStripMenuItem
+            // 
+            this.sundayStageToolStripMenuItem.Name = "sundayStageToolStripMenuItem";
+            this.sundayStageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sundayStageToolStripMenuItem.Text = "Sunday Stage";
+            this.sundayStageToolStripMenuItem.Click += new System.EventHandler(this.sundayStageToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -123,7 +184,9 @@
             this.MinimumSize = new System.Drawing.Size(397, 295);
             this.Name = "FrmMain";
             this.Text = "FreeStyler Control";
+            this.Resize += new System.EventHandler(this.FrmMain_Resize);
             this.groupBox1.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -138,5 +201,12 @@
         private Button BtnToggleAll;
         private Label label1;
         public TextBox TxtOutput;
+        private NotifyIcon notifyIcon1;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem toggleAllToolStripMenuItem;
+        private ToolStripMenuItem powerOnToolStripMenuItem;
+        private ToolStripMenuItem powerOffToolStripMenuItem;
+        private ToolStripMenuItem sundayStageToolStripMenuItem;
+        private ToolStripMenuItem exitToolStripMenuItem;
     }
 }

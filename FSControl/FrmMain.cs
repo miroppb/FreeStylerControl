@@ -106,6 +106,47 @@ namespace FSControl
             SendTCPMessage(STAGE_IP, Commands.LIGHTSRED);
             TxtOutput.Text += "Sent Sunday Colors" + Environment.NewLine;
         }
+
+        private void FrmMain_Resize(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                Hide();
+                notifyIcon1.Visible = true;
+            }
+        }
+
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            Show();
+            this.WindowState = FormWindowState.Normal;
+            notifyIcon1.Visible = false;
+        }
+
+        private void toggleAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToggleAll();
+        }
+
+        private void powerOnToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PowerAllOn();
+        }
+
+        private void powerOffToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PowerAllOff();
+        }
+
+        private void sundayStageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SundayLights();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 
     public static class Commands
