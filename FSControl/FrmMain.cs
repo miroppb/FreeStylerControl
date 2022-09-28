@@ -70,7 +70,6 @@ namespace FSControl
         {
             SendTCPMessage(WALL_IP, Commands.POWERON_INTENSITY);
             SendTCPMessage(STAGE_IP, Commands.POWERON_INTENSITY);
-            SendTCPMessage(STAGE_IP, Commands.POWERON_SHUTTER);
             TxtOutput.Text += "Sent power on" + Environment.NewLine;
         }
 
@@ -78,7 +77,6 @@ namespace FSControl
         {
             SendTCPMessage(WALL_IP, Commands.POWEROFF_INTENSITY);
             SendTCPMessage(STAGE_IP, Commands.POWEROFF_INTENSITY);
-            SendTCPMessage(STAGE_IP, Commands.POWEROFF_SHUTTER);
             TxtOutput.Text += "Sent power off" + Environment.NewLine;
         }
 
@@ -116,8 +114,6 @@ namespace FSControl
         static public readonly string SELECTALL2 = "FSOC000000";
         static public readonly string POWERON_INTENSITY = "FSOC138255";
         static public readonly string POWEROFF_INTENSITY = "FSOC138000";
-        static public readonly string POWERON_SHUTTER = "FSOC137255";
-        static public readonly string POWEROFF_SHUTTER = "FSOC137000";
         static public readonly string SELECTGROUP1 = "FSOC034255";
         static public readonly string SELECTGROUP2 = "FSOC035255";
         static public readonly string SELECTGROUP3 = "FSOC036255";

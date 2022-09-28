@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.BtnPowerOn = new System.Windows.Forms.Button();
             this.BtnPowerOff = new System.Windows.Forms.Button();
             this.BtnSundayStage = new System.Windows.Forms.Button();
@@ -118,6 +119,7 @@
             this.Controls.Add(this.TxtOutput);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.BtnSundayStage);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(397, 295);
             this.Name = "FrmMain";
             this.Text = "FreeStyler Control";
