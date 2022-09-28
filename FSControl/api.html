@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<title>Junk</title>
+	<script>
+		function ClickButton(action) {
+			$.getJSON("http://localhost:1114/api/" + action, function (data) {
+				$('#results').val(data.message);
+			});
+		}
+	</script>
+</head>
+<body>
+	<div id="rebootDevices" style="width: 700px; margin: auto; text-align: center;">
+		Available actions:
+		<button id="toggleall" style="padding: 5px 10px; margin: 5px 10px;" onclick="ClickButton('toggleall');">Toggle All</button>
+		<button id="powerallon" style="padding: 5px 10px; margin: 5px 10px;" onclick="ClickButton('powerallon');">Power All On</button>
+		<button id="poweralloff" style="padding: 5px 10px; margin: 5px 10px;" onclick="ClickButton('poweralloff');">Power All Off</button>
+		<button id="sundaylights" style="padding: 5px 10px; margin: 5px 10px;" onclick="ClickButton('sundaylights');">Sunday Lights</button>
+
+		<textarea id="results" style="width: 670px; height: 300px;"></textarea>
+	</div>
+</body>
+</html>

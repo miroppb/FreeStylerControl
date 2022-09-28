@@ -17,9 +17,11 @@ namespace FSControl.Controllers
     public  class FSController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<string> Get()
+        public ContentResult Get()
         {
-            return Ok(new { message = "Hello", actions = new string[] { "toggleall", "powerallon", "poweralloff", "sundaylights" } });
+            //return Ok(new { message = "Hello", actions = new string[] { "toggleall", "powerallon", "poweralloff", "sundaylights" } });
+            var html = System.IO.File.ReadAllText(@"api.html");
+            return base.Content(html, "text/html");
         }
 
         [HttpGet("{_action}")]

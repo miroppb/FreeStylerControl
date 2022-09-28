@@ -62,41 +62,50 @@ namespace FSControl
         {
             SendTCPMessage(WALL_IP, Commands.SELECTALL);
             SendTCPMessage(WALL_IP, Commands.SELECTALL2);
+            SendTCPMessage(STAGE_IP, Commands.SELECTALL);
+            SendTCPMessage(STAGE_IP, Commands.SELECTALL2);
         }
 
         public void PowerAllOn()
         {
-            SendTCPMessage(WALL_IP, Commands.POWERON);
+            SendTCPMessage(WALL_IP, Commands.POWERON_INTENSITY);
+            SendTCPMessage(STAGE_IP, Commands.POWERON_INTENSITY);
+            SendTCPMessage(STAGE_IP, Commands.POWERON_SHUTTER);
             TxtOutput.Text += "Sent power on" + Environment.NewLine;
         }
 
         public void PowerAllOff()
         {
-            SendTCPMessage(WALL_IP, Commands.POWEROFF);
-            TxtOutput.Text += "Sent power on" + Environment.NewLine;
+            SendTCPMessage(WALL_IP, Commands.POWEROFF_INTENSITY);
+            SendTCPMessage(STAGE_IP, Commands.POWEROFF_INTENSITY);
+            SendTCPMessage(STAGE_IP, Commands.POWEROFF_SHUTTER);
+            TxtOutput.Text += "Sent power off" + Environment.NewLine;
         }
 
-        public void SundayLights()
+        public async void SundayLights()
         {
-            //select outside
+            //select outside and power on
+            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP1);
+            SendTCPMessage(STAGE_IP, Commands.POWERON_INTENSITY);
+            await Task.Delay(500);
             SendTCPMessage(STAGE_IP, Commands.SELECTGROUP1);
             //select inside
             SendTCPMessage(STAGE_IP, Commands.SELECTGROUP2);
             SendTCPMessage(STAGE_IP, Commands.SELECTGROUP3);
+            //send power on to both groups
+            SendTCPMessage(STAGE_IP, Commands.POWERON_INTENSITY);
             //set white to full
             SendTCPMessage(STAGE_IP, Commands.LIGHTSWHITE);
-            //unselect outside
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP1);
             //unselect 3rd device
             SendTCPMessage(STAGE_IP, Commands.SELECTGROUP3);
             //set magenta to 220
-            SendTCPMessage(STAGE_IP, Commands.LIGHTSRED);
+            SendTCPMessage(STAGE_IP, Commands.LIGHTSBLUE);
             //unselect 2nd device
             SendTCPMessage(STAGE_IP, Commands.SELECTGROUP2);
             //select 3rd device
             SendTCPMessage(STAGE_IP, Commands.SELECTGROUP3);
             //set cyan color to 220
-            SendTCPMessage(STAGE_IP, Commands.LIGHTSBLUE);
+            SendTCPMessage(STAGE_IP, Commands.LIGHTSRED);
             TxtOutput.Text += "Sent Sunday Colors" + Environment.NewLine;
         }
     }
@@ -105,14 +114,16 @@ namespace FSControl
     {
         static public readonly string SELECTALL = "FSOC000255";
         static public readonly string SELECTALL2 = "FSOC000000";
-        static public readonly string POWERON = "FSOC138255";
-        static public readonly string POWEROFF = "FSOC138000";
+        static public readonly string POWERON_INTENSITY = "FSOC138255";
+        static public readonly string POWEROFF_INTENSITY = "FSOC138000";
+        static public readonly string POWERON_SHUTTER = "FSOC137255";
+        static public readonly string POWEROFF_SHUTTER = "FSOC137000";
         static public readonly string SELECTGROUP1 = "FSOC034255";
         static public readonly string SELECTGROUP2 = "FSOC035255";
         static public readonly string SELECTGROUP3 = "FSOC036255";
         static public readonly string LIGHTSWHITE = "FSOC583255";
-        static public readonly string LIGHTSRED = "FSOC131220";
-        static public readonly string LIGHTSBLUE = "FSOC130220";
+        static public readonly string LIGHTSBLUE = "FSOC132220";
+        static public readonly string LIGHTSRED = "FSOC130220";
 
     }
 }

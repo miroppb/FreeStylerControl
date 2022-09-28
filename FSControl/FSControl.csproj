@@ -18,4 +18,10 @@
     <PackageReference Include="MySql.Data" Version="8.0.30" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="api.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
