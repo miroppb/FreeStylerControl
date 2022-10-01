@@ -64,6 +64,7 @@ namespace FSControl
             SendTCPMessage(WALL_IP, Commands.SELECTALL2);
             SendTCPMessage(STAGE_IP, Commands.SELECTALL);
             SendTCPMessage(STAGE_IP, Commands.SELECTALL2);
+            TxtOutput.Text += "Sent Toggle All" + Environment.NewLine;
         }
 
         public void PowerAllOn()

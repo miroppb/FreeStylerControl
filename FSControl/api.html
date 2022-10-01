@@ -5,8 +5,8 @@
 	<title>Junk</title>
 	<script>
 		function ClickButton(action) {
-			$.getJSON("http://localhost:1114/api/" + action, function (data) {
-				$('#results').val(data.message);
+			$.getJSON("http://" + window.location.hostname + ":" + window.location.port + "/api/" + action, function (data) {
+				$('#results').val(($('#results').val() + "\n" + data.message).trim());
 			});
 		}
 	</script>
