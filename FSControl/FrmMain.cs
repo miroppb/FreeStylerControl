@@ -37,20 +37,21 @@ namespace FSControl
         /// <param name="message">Message to send</param>
         private void SendTCPMessage(string ip, string message)
         {
-            TcpClient client = new TcpClient();
+            using (TcpClient client = new TcpClient())
+            {
+                IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), PORT_NUM);
 
-            IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), PORT_NUM);
+                client.Connect(serverEndPoint);
 
-            client.Connect(serverEndPoint);
+                using (NetworkStream clientStream = client.GetStream())
+                {
+                    byte[] buffer = Encoding.UTF8.GetBytes(message);
+                    clientStream.Write(buffer, 0, buffer.Length);
+                    clientStream.Flush();
+                }
+            }
 
-            NetworkStream clientStream = client.GetStream();
-
-            byte[] buffer = Encoding.UTF8.GetBytes(message);
-            clientStream.Write(buffer, 0, buffer.Length);
-            clientStream.Flush();
-
-            clientStream.Close();
-            client.Close();
+            Thread.Sleep(500);
         }
 
         private void BtnToggleAll_Click(object sender, EventArgs e)
@@ -81,12 +82,11 @@ namespace FSControl
             TxtOutput.Text += "Sent power off" + Environment.NewLine;
         }
 
-        public async void SundayLights()
+        public void SundayLights()
         {
             //select outside and power on
             SendTCPMessage(STAGE_IP, Commands.SELECTGROUP1);
             SendTCPMessage(STAGE_IP, Commands.POWERON_INTENSITY);
-            await Task.Delay(500);
             SendTCPMessage(STAGE_IP, Commands.SELECTGROUP1);
             //select inside
             SendTCPMessage(STAGE_IP, Commands.SELECTGROUP2);

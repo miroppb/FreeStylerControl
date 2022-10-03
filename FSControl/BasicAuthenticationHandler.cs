@@ -66,7 +66,7 @@ namespace FSControl
                         return Task.FromResult(AuthenticateResult.Fail("The username or password is not correct."));
                     Program.frm?.Invoke(new System.Action(() =>
                     {
-                        Program.frm.TxtOutput.Text = "User " + authUsername + " logged in";
+                        Program.frm.TxtOutput.Text = "User " + authUsername + " logged in" + Environment.NewLine;
                     }));
                 }
 
