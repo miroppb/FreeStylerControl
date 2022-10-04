@@ -43,7 +43,9 @@
             this.powerOnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.powerOffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sundayStageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timerSchedule = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -132,9 +134,10 @@
             this.powerOnToolStripMenuItem,
             this.powerOffToolStripMenuItem,
             this.sundayStageToolStripMenuItem,
+            this.scheduleToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(146, 114);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(146, 136);
             // 
             // toggleAllToolStripMenuItem
             // 
@@ -164,12 +167,25 @@
             this.sundayStageToolStripMenuItem.Text = "Sunday Stage";
             this.sundayStageToolStripMenuItem.Click += new System.EventHandler(this.sundayStageToolStripMenuItem_Click);
             // 
+            // scheduleToolStripMenuItem
+            // 
+            this.scheduleToolStripMenuItem.Name = "scheduleToolStripMenuItem";
+            this.scheduleToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.scheduleToolStripMenuItem.Text = "Schedule";
+            this.scheduleToolStripMenuItem.Click += new System.EventHandler(this.scheduleToolStripMenuItem_Click);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // timerSchedule
+            // 
+            this.timerSchedule.Enabled = true;
+            this.timerSchedule.Interval = 60000;
+            this.timerSchedule.Tick += new System.EventHandler(this.timerSchedule_Tick);
             // 
             // FrmMain
             // 
@@ -209,5 +225,7 @@
         private ToolStripMenuItem powerOffToolStripMenuItem;
         private ToolStripMenuItem sundayStageToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripMenuItem scheduleToolStripMenuItem;
+        private System.Windows.Forms.Timer timerSchedule;
     }
 }

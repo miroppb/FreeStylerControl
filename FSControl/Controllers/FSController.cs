@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Isopoh.Cryptography.Argon2;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Internal;
 using System;
@@ -45,6 +46,12 @@ namespace FSControl.Controllers
                 case "sundaylights":
                     Program.frm?.SundayLights();
                     ret = new { message = "Sunday Lights sent" };
+                    break;
+                case "history":
+                    StreamReader r = new StreamReader(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\FSControl\\log.log");
+                    List<string> lst = r.ReadToEnd().Split(Environment.NewLine).ToList();
+                    r.Close();
+                    ret = lst.TakeLast(50).ToList();
                     break;
             }
             return Ok(ret);

@@ -18,9 +18,9 @@ namespace FSControl
         public string Name { get; }
     }
 
-    public class FSControlUser
+    public class User
     {
         public string? username { get; set; }
-        public string? password { get; set; }
+        public string? hash { get; set; }
     }
 }

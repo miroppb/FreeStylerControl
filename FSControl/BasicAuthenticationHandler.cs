@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Dapper;
 using MySql.Data.MySqlClient;
 using Microsoft.AspNetCore.Mvc;
+using Isopoh.Cryptography.Argon2;
 
 namespace FSControl
 {
@@ -61,9 +62,14 @@ namespace FSControl
 
                 using (MySqlConnection conn = secrets.GetConnectionString())
                 {
-                    FSControlUser? user = conn.Query<FSControlUser>("SELECT username FROM user WHERE username = @user AND password = @pass", new DynamicParameters(new { user = authUsername, pass = authPassword })).FirstOrDefault();
+                    User? user = conn.Query<User>("SELECT * FROM user WHERE username = @user", new DynamicParameters(new { user = authUsername })).FirstOrDefault();
                     if (user == null)
                         return Task.FromResult(AuthenticateResult.Fail("The username or password is not correct."));
+
+                    //verify password
+                    if (!Argon2.Verify(user.hash!, authPassword))
+                        return Task.FromResult(AuthenticateResult.Fail("The username or password is not correct."));
+
                     Program.frm?.Invoke(new System.Action(() =>
                     {
                         Program.frm.TxtOutput.Text = "User " + authUsername + " logged in" + Environment.NewLine;
