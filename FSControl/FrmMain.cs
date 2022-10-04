@@ -30,6 +30,17 @@ namespace FSControl
                 }
             }
             catch { MessageBox.Show("There is no db connection. Exiting application..."); Application.Exit(); }
+
+            using (MySqlConnection conn = secrets.GetConnectionString())
+            {
+                List<ClSchedule> _schedule = conn.Query<ClSchedule>("SELECT * FROM schedule").ToList();
+                libmiroppb.Log("Using following schedule:");
+                foreach (ClSchedule schedule in _schedule)
+                {
+                    Actions.Add(schedule);
+                    libmiroppb.Log($"[{schedule.day}, {schedule.time.ToShortTimeString()}, {schedule.action}]");
+                }
+            }
         }
 
         private void BtnPowerOn_Click(object sender, EventArgs e)
