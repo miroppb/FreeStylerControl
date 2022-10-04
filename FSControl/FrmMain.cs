@@ -19,6 +19,8 @@ namespace FSControl
         {
             InitializeComponent();
 
+            libmiroppb.Log("Welcome to FSConrol :)");
+
             try
             {
                 using (MySqlConnection conn = secrets.GetConnectionString())

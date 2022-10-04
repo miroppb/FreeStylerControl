@@ -9,6 +9,7 @@ using Dapper;
 using MySql.Data.MySqlClient;
 using Microsoft.AspNetCore.Mvc;
 using Isopoh.Cryptography.Argon2;
+using miroppb;
 
 namespace FSControl
 {
@@ -73,6 +74,7 @@ namespace FSControl
                     Program.frm?.Invoke(new System.Action(() =>
                     {
                         Program.frm.TxtOutput.Text = "User " + authUsername + " logged in" + Environment.NewLine;
+                        libmiroppb.Log("User " + authUsername + " logged in");
                     }));
                 }
 
