@@ -1,4 +1,4 @@
-﻿public enum ScheduleActions { TurnAllOff, TurnAllOn, SundayLights };
+﻿public enum ScheduleActions { TurnAllOff, TurnAllOn, SundayLights, ToggleAll };
 
 internal class ClSchedule
 {

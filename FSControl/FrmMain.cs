@@ -224,6 +224,11 @@ namespace FSControl
                     SundayLights();
                     libmiroppb.Log("Running Sunday Lights");
                 }
+                else if (DateTime.Now.DayOfWeek == a.day && DateTime.Now.ToShortTimeString() == a.time.ToShortTimeString() && a.action == ScheduleActions.ToggleAll)
+                {
+                    ToggleAll();
+                    libmiroppb.Log("Running Toggle All");
+                }
             }
         }
     }
