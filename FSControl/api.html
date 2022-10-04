@@ -10,6 +10,15 @@
 				$('#results').val(($('#results').val() + data.message).trim());
 			});
 		}
+        function ShowHistory() {
+            $.getJSON("http://" + window.location.hostname + ":" + window.location.port + "/api/history", function (data) {
+                $('#results').val("");
+                $.each(data, function (index) {
+                    $('#results').val($('#results').val() + data[index] + "\n");
+                });
+
+            });
+        }
 	</script>
 </head>
 <body>
@@ -19,7 +28,7 @@
 		<button id="powerallon" style="padding: 5px 10px; margin: 5px 10px;" onclick="ClickButton('powerallon');">Power All On</button>
 		<button id="poweralloff" style="padding: 5px 10px; margin: 5px 10px;" onclick="ClickButton('poweralloff');">Power All Off</button>
 		<button id="sundaylights" style="padding: 5px 10px; margin: 5px 10px;" onclick="ClickButton('sundaylights');">Sunday Lights</button>
-		<button id="history" style="padding: 5px 10px; margin: 5px 10px;" onclick="ClickButton('history');">History</button>
+		<button id="history" style="padding: 5px 10px; margin: 5px 10px;" onclick="ShowHistory();">History</button>
 
 		<textarea id="results" style="width: 670px; height: 300px;"></textarea>
 	</div>
