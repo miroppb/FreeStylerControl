@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<title>Junk</title>
+	<script>
+		$(document).ready(function () {
+			$("#submit").click(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "http://" + window.location.hostname + ":" + window.location.port + "/register/",
+                    type: 'post',
+                    data: $('#form').serialize(),
+                    success: function () {
+						alert("Registered!");
+					},
+					fail: function () {
+                        alert("Something went wrong...");
+                    }
+                });
+			});
+            $('#login').click(function () {
+				window.location = "http://" + window.location.hostname + ":" + window.location.port + "/api/";
+			});
+		});
+	</script>
+</head>
+<body>
+	<form id="form">
+		Username: <input type="text" id="username" name="username" size="20" /><br />
+		Password: <input type="password" id="password" name="password" size="20" /><br />
+		<button id="submit" name="submit">Submit</button><br /><br />
+	</form>
+	<button id="login">Log in</button>
+</body>
+</html>

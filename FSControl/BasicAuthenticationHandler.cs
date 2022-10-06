@@ -63,7 +63,7 @@ namespace FSControl
 
                 using (MySqlConnection conn = secrets.GetConnectionString())
                 {
-                    User? user = conn.Query<User>("SELECT * FROM user WHERE username = @user", new DynamicParameters(new { user = authUsername })).FirstOrDefault();
+                    User? user = conn.Query<User>("SELECT * FROM users WHERE username = @user", new DynamicParameters(new { user = authUsername })).FirstOrDefault();
                     if (user == null)
                         return Task.FromResult(AuthenticateResult.Fail("The username or password is not correct."));
 

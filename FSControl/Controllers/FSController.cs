@@ -1,7 +1,10 @@
-﻿using Isopoh.Cryptography.Argon2;
+﻿using Dapper;
+using Isopoh.Cryptography.Argon2;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Internal;
+using Microsoft.VisualBasic.ApplicationServices;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,6 +70,38 @@ namespace FSControl.Controllers
         public IEnumerable<string> Get()
         {
             return new string[] { "Scary music comes from FreeStyler" };
+        }
+    }
+
+    [EnableCors("Policy")]
+    [Route("register")]
+    [ApiController]
+    public class RegisterController : ControllerBase
+    {
+        [HttpGet]
+        public ContentResult Get()
+        {
+            var html = System.IO.File.ReadAllText(@"register.html");
+            return base.Content(html, "text/html");
+        }
+
+        [HttpPost]
+        public ActionResult Post([FromForm] string username, [FromForm] string password)
+        {
+            Object? ret = null;
+
+            //using (MySqlConnection db = secrets.GetConnectionString())
+            //{
+            //    string hash = Argon2.Hash(password);
+            //    int r = db.Execute("INSERT INTO users VALUES(NULL, @user, @pass);", new DynamicParameters(new { user = username, pass = hash }));
+            //    if (r == 1)
+            //        ret = new { message = "success" };
+            //    else
+            //        ret = new { message = "fail" };
+            //}
+            ret = new { message = "success" };
+
+            return Ok(ret);
         }
     }
 }
