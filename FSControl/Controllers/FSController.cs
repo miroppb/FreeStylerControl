@@ -90,16 +90,15 @@ namespace FSControl.Controllers
         {
             Object? ret = null;
 
-            //using (MySqlConnection db = secrets.GetConnectionString())
-            //{
-            //    string hash = Argon2.Hash(password);
-            //    int r = db.Execute("INSERT INTO users VALUES(NULL, @user, @pass);", new DynamicParameters(new { user = username, pass = hash }));
-            //    if (r == 1)
-            //        ret = new { message = "success" };
-            //    else
-            //        ret = new { message = "fail" };
-            //}
-            ret = new { message = "success" };
+            using (MySqlConnection db = secrets.GetConnectionString())
+            {
+                string hash = Argon2.Hash(password);
+                int r = db.Execute("INSERT INTO users VALUES(NULL, @user, @pass);", new DynamicParameters(new { user = username, pass = hash }));
+                if (r == 1)
+                    ret = new { message = "success" };
+                else
+                    ret = new { message = "fail" };
+            }
 
             return Ok(ret);
         }
