@@ -2,15 +2,7 @@
 using Isopoh.Cryptography.Argon2;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Internal;
-using Microsoft.VisualBasic.ApplicationServices;
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
 
 namespace FSControl.Controllers
 {
@@ -20,6 +12,9 @@ namespace FSControl.Controllers
     [BasicAuthorization]
     public  class FSController : ControllerBase
     {
+        public const string STAGE_IP = "192.168.3.16";
+        public const string WALL_IP = "192.168.3.14";
+
         [HttpGet]
         public ContentResult Get()
         {
@@ -32,31 +27,50 @@ namespace FSControl.Controllers
         public ActionResult<string> Get(string _action)
         {
             Object? ret = null;
-            switch (_action)
+            try
             {
-                case "toggleall":
-                    Program.frm?.ToggleAll();
-                    ret = new { message = "Toggle All sent" };
-                    break;
-                case "powerallon":
-                    Program.frm?.PowerAllOn();
-                    ret = new { message = "Power All On sent" };
-                    break;
-                case "poweralloff":
-                    Program.frm?.PowerAllOff();
-                    ret = new { message = "Power All Off sent" };
-                    break;
-                case "sundaylights":
-                    Program.frm?.SundayLights();
-                    ret = new { message = "Sunday Lights sent" };
-                    break;
-                case "history":
-                    StreamReader r = new StreamReader(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\FSControl\\log.log");
-                    List<string> lst = r.ReadToEnd().Split(Environment.NewLine).ToList();
-                    r.Close();
-                    ret = lst.TakeLast(50).ToList();
-                    break;
+                switch (_action)
+                {
+                    case "toggleall":
+                        Program.frm?.ToggleAll();
+                        ret = new { message = "Toggle All sent" };
+                        break;
+                    case "powerallon":
+                        Program.frm?.PowerAllOn();
+                        ret = new { message = "Power All On sent" };
+                        break;
+                    case "poweralloff":
+                        Program.frm?.PowerAllOff();
+                        ret = new { message = "Power All Off sent" };
+                        break;
+                    case "sundaylights":
+                        Program.frm?.SundayLights();
+                        ret = new { message = "Sunday Lights sent" };
+                        break;
+                    case "testconnection":
+                        bool working = Program.frm!.TestConnection(WALL_IP);
+                        bool working2 = Program.frm!.TestConnection(STAGE_IP);
+                        if (working && working2)
+                            ret = new { message = "Both Freestylers are online" };
+                        else
+                            if (!working)
+                                ret = new { message = "Wall Freestyler is offline" };
+                            if (!working2)
+                                ret = new { message = "Stage Freestyler is offline" };
+                        break;
+                    case "history":
+                        StreamReader r = new StreamReader(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\FSControl\\log.log");
+                        List<string> lst = r.ReadToEnd().Split(Environment.NewLine).ToList();
+                        r.Close();
+                        ret = lst.TakeLast(50).ToList();
+                        break;
+                }
             }
+            catch (Exception ex)
+            {
+                ret = new { message = "Error running command. Most likely because FreeStyler isn't responding. Please re/start FreeStyler", ex = ex.Message };
+            }
+            
             return Ok(ret);
         }
     }
@@ -70,6 +84,17 @@ namespace FSControl.Controllers
         public IEnumerable<string> Get()
         {
             return new string[] { "Scary music comes from FreeStyler" };
+        }
+
+        [HttpGet("icon/{id}")]
+        public ActionResult Get(string id)
+        {
+            if (id == "favicon.ico")
+            {
+                return new FileStreamResult(new FileStream("spotlight.ico", FileMode.Open), "image/x-icon");
+            }
+            else
+                return Forbid();
         }
     }
 

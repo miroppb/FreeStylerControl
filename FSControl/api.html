@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link rel="icon" type="image/x-icon" href="/icon/favicon.ico">
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<title>Junk</title>
 	<script>
+		$(document).ready(function () {
+			$.getJSON("http://" + window.location.hostname + ":" + window.location.port + "/api/testconnection", function (data) {
+                $('#results').val(($('#results').val() + data.message).trim());
+			});
+		});
 		function ClickButton(action) {
 			$('#results').val(($('#results').val() + "\nPlease wait for " + action + "\n"));
 			$.getJSON("http://" + window.location.hostname + ":" + window.location.port + "/api/" + action, function (data) {
 				$('#results').val(($('#results').val() + data.message).trim());
 			});
 		}
-        function ShowHistory() {
-            $.getJSON("http://" + window.location.hostname + ":" + window.location.port + "/api/history", function (data) {
-                $('#results').val("");
-                $.each(data, function (index) {
-                    $('#results').val($('#results').val() + data[index] + "\n");
-                });
+		function ShowHistory() {
+			$.getJSON("http://" + window.location.hostname + ":" + window.location.port + "/api/history", function (data) {
+				$('#results').val("");
+				$.each(data, function (index) {
+					$('#results').val($('#results').val() + data[index] + "\n");
+				});
 
-            });
-        }
+			});
+		}
 	</script>
 </head>
 <body>

@@ -82,6 +82,21 @@ namespace FSControl
             Thread.Sleep(500);
         }
 
+        public bool TestConnection(string ip)
+        {
+            try
+            {
+                using (TcpClient client = new TcpClient())
+                {
+                    IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), PORT_NUM);
+
+                    client.Connect(serverEndPoint);
+                }
+                return true;
+            }
+            catch { return false; }
+        }
+
         private void BtnToggleAll_Click(object sender, EventArgs e)
         {
             ToggleAll();
@@ -231,6 +246,32 @@ namespace FSControl
                 }
             }
         }
+
+        private void BtnChangeLights_Click(object sender, EventArgs e)
+        {
+            if (CmbVariations.SelectedIndex > -1)
+            {
+                switch (CmbVariations.SelectedIndex)
+                {
+                    case 0:
+                        //blue-purple
+                        libmiroppb.Log("Running Blue-Purple lights");
+                        foreach (string a in Commands.LIGHTSBLUEPURPLE)
+                        {
+                            SendTCPMessage(STAGE_IP, a);
+                        }
+                        break;
+                    case 1:
+                        //harvest-yellow
+                        libmiroppb.Log("Running Harvest-Yellow lights");
+                        foreach (string a in Commands.LIGHTSHARVESTYELLOW)
+                        {
+                            SendTCPMessage(STAGE_IP, a);
+                        }
+                        break;
+                }
+            }
+        }
     }
 
     public static class Commands
@@ -246,5 +287,7 @@ namespace FSControl
         static public readonly string LIGHTSBLUE = "FSOC132220";
         static public readonly string LIGHTSRED = "FSOC130220";
 
+        static public readonly string[] LIGHTSBLUEPURPLE = { "FSOC130165", "FSOC131135", "FSOC132255" };
+        static public readonly string[] LIGHTSHARVESTYELLOW = { "FSOC130254", "FSOC131243", "FSOC132021" };
     }
 }

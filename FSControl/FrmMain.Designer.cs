@@ -46,6 +46,8 @@
             this.scheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerSchedule = new System.Windows.Forms.Timer(this.components);
+            this.BtnChangeLights = new System.Windows.Forms.Button();
+            this.CmbVariations = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -96,10 +98,10 @@
             this.TxtOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TxtOutput.Location = new System.Drawing.Point(12, 107);
+            this.TxtOutput.Location = new System.Drawing.Point(12, 135);
             this.TxtOutput.Multiline = true;
             this.TxtOutput.Name = "TxtOutput";
-            this.TxtOutput.Size = new System.Drawing.Size(356, 135);
+            this.TxtOutput.Size = new System.Drawing.Size(356, 145);
             this.TxtOutput.TabIndex = 4;
             // 
             // BtnToggleAll
@@ -187,11 +189,34 @@
             this.timerSchedule.Interval = 60000;
             this.timerSchedule.Tick += new System.EventHandler(this.timerSchedule_Tick);
             // 
+            // BtnChangeLights
+            // 
+            this.BtnChangeLights.Location = new System.Drawing.Point(144, 106);
+            this.BtnChangeLights.Name = "BtnChangeLights";
+            this.BtnChangeLights.Size = new System.Drawing.Size(75, 23);
+            this.BtnChangeLights.TabIndex = 7;
+            this.BtnChangeLights.Text = "<- Change";
+            this.BtnChangeLights.UseVisualStyleBackColor = true;
+            this.BtnChangeLights.Click += new System.EventHandler(this.BtnChangeLights_Click);
+            // 
+            // CmbVariations
+            // 
+            this.CmbVariations.FormattingEnabled = true;
+            this.CmbVariations.Items.AddRange(new object[] {
+            "Blue-Purple",
+            "Havest-Yellow"});
+            this.CmbVariations.Location = new System.Drawing.Point(17, 106);
+            this.CmbVariations.Name = "CmbVariations";
+            this.CmbVariations.Size = new System.Drawing.Size(121, 23);
+            this.CmbVariations.TabIndex = 8;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(381, 256);
+            this.ClientSize = new System.Drawing.Size(381, 294);
+            this.Controls.Add(this.CmbVariations);
+            this.Controls.Add(this.BtnChangeLights);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.BtnToggleAll);
             this.Controls.Add(this.TxtOutput);
@@ -227,5 +252,7 @@
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripMenuItem scheduleToolStripMenuItem;
         private System.Windows.Forms.Timer timerSchedule;
+        private Button BtnChangeLights;
+        private ComboBox CmbVariations;
     }
 }

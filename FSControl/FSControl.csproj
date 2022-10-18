@@ -10,7 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="spotlight.ico" />
+    <Content Include="spotlight.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
