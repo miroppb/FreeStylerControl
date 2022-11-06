@@ -202,11 +202,6 @@
             // CmbVariations
             // 
             this.CmbVariations.FormattingEnabled = true;
-            this.CmbVariations.Items.AddRange(new object[] {
-            "Blue-Purple",
-            "Havest-Yellow",
-            "Blue",
-            "Light Blue"});
             this.CmbVariations.Location = new System.Drawing.Point(17, 106);
             this.CmbVariations.Name = "CmbVariations";
             this.CmbVariations.Size = new System.Drawing.Size(121, 23);
@@ -228,6 +223,7 @@
             this.MinimumSize = new System.Drawing.Size(397, 295);
             this.Name = "FrmMain";
             this.Text = "FreeStyler Control";
+            this.Load += new System.EventHandler(this.FrmMain_Load);
             this.Resize += new System.EventHandler(this.FrmMain_Resize);
             this.groupBox1.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
@@ -255,6 +251,6 @@
         private ToolStripMenuItem scheduleToolStripMenuItem;
         private System.Windows.Forms.Timer timerSchedule;
         private Button BtnChangeLights;
-        private ComboBox CmbVariations;
+        public ComboBox CmbVariations;
     }
 }

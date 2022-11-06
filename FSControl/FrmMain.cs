@@ -273,42 +273,30 @@ namespace FSControl
         {
             if (CmbVariations.SelectedIndex > -1)
             {
-                switch (CmbVariations.SelectedIndex)
-                {
-                    case 0:
-                        //blue-purple
-                        libmiroppb.Log("Running Blue-Purple lights");
-                        foreach (string a in Commands.LIGHTSBLUEPURPLE)
-                        {
-                            SendTCPMessage(WALL_IP, a);
-                        }
-                        break;
-                    case 1:
-                        //harvest-yellow
-                        libmiroppb.Log("Running Harvest-Yellow lights");
-                        foreach (string a in Commands.LIGHTSHARVESTYELLOW)
-                        {
-                            SendTCPMessage(WALL_IP, a);
-                        }
-                        break;
-                    case 2:
-                        //blue
-                        libmiroppb.Log("Running Blue lights");
-                        foreach (string a in Commands.LIGHTSBLUECOMBO)
-                        {
-                            SendTCPMessage(WALL_IP, a);
-                        }
-                        break;
-                    case 3:
-                        //light-blue
-                        libmiroppb.Log("Running Light Blue lights");
-                        foreach (string a in Commands.LIGHTSLIGHTBLUE)
-                        {
-                            SendTCPMessage(WALL_IP, a);
-                        }
-                        break;
-                }
+                string val = CmbVariations.SelectedItem.ToString()!;
+                object? cmd = typeof(Commands).GetField("LIGHTS_" + val)?.GetValue(this);
+                ChangeCombo((string[])cmd!);
             }
+        }
+
+        public void ChangeCombo(string[] name)
+        {
+            foreach (string a in name)
+            {
+                SendTCPMessage(WALL_IP, a);
+            }
+        }
+
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+            List<string> combo = new List<string>();
+            foreach (var prop in typeof(Commands).GetFields())
+            {
+                if (prop.FieldType.BaseType!.FullName == "System.Array")
+                    combo.Add(prop.Name.Replace("LIGHTS_", ""));
+            }
+            CmbVariations.Items.Clear();
+            CmbVariations.Items.AddRange(combo.ToArray());
         }
     }
 
@@ -325,9 +313,9 @@ namespace FSControl
         static public readonly string LIGHTSBLUE = "FSOC132220";
         static public readonly string LIGHTSRED = "FSOC130220";
 
-        static public readonly string[] LIGHTSBLUEPURPLE = { "FSOC130165", "FSOC131135", "FSOC132255" };
-        static public readonly string[] LIGHTSBLUECOMBO = { "FSOC130013", "FSOC131034", "FSOC132255" };
-        static public readonly string[] LIGHTSLIGHTBLUE = { "FSOC130021", "FSOC131243", "FSOC132255" };
-        static public readonly string[] LIGHTSHARVESTYELLOW = { "FSOC130254", "FSOC131243", "FSOC132021" };
+        static public readonly string[] LIGHTS_BLUE_PURPLE = { "FSOC130165", "FSOC131135", "FSOC132255" };
+        static public readonly string[] LIGHTS_BLUE_COMBO = { "FSOC130013", "FSOC131034", "FSOC132255" };
+        static public readonly string[] LIGHTS_LIGHT_BLUE = { "FSOC130021", "FSOC131243", "FSOC132255" };
+        static public readonly string[] LIGHTS_HARVEST_YELLOW = { "FSOC130254", "FSOC131243", "FSOC132021" };
     }
 }

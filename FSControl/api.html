@@ -37,13 +37,24 @@
 			});
             $.getJSON("http://" + window.location.hostname + ":" + window.location.port + "/api/actions", function (data) {
 				$.each(data.actions, function (key, value) {
-					console.log(key);
-                    var button_toggle = $('<button/>', {
-                        text: value,
-                        class: 'btn btn-1',
-                        click: function () { ClickButton(key) }
-                    });
-                    $('#actions').append(button_toggle);
+					if (key != "combo") {
+						var button_toggle = $('<button/>', {
+							text: value,
+							class: 'btn btn-1',
+							click: function () { ClickButton(key) }
+						});
+						$('#actions').append(button_toggle);
+					}
+					else {
+						console.log(value);
+						$.each(value, function (index, opt) {
+							var button_combo = $('<option/>', {
+                                text: opt.substr(7),
+                                name: opt.substr(7)
+							});
+							$('#scombo').append(button_combo);
+						});
+                    }
 				});
                 var button_history = $('<button/>', {
                     text: "History",
@@ -55,9 +66,16 @@
 		});
 		function ClickButton(action) {
 			$('#results').val(($('#results').val() + "Please wait for " + action + "\n"));
-			$.getJSON("http://" + window.location.hostname + ":" + window.location.port + "/api/" + action, function (data) {
-				$('#results').val(($('#results').val() + data.message).trim() + "\n");
-			});
+			if (action != "combo") {
+				$.getJSON("http://" + window.location.hostname + ":" + window.location.port + "/api/" + action, function (data) {
+					$('#results').val(($('#results').val() + data.message).trim() + "\n");
+				});
+			}
+			else {
+                $.getJSON("http://" + window.location.hostname + ":" + window.location.port + "/api/" + action + $("#scombo option:selected").text(), function (data) {
+                    $('#results').val(($('#results').val() + data.message).trim() + "\n");
+                });
+            }
 		}
 		function ShowHistory() {
 			$.getJSON("http://" + window.location.hostname + ":" + window.location.port + "/api/history", function (data) {
@@ -72,6 +90,9 @@
 </head>
 <body>
 	<div id="actions" style="width: 75%; margin: auto; text-align: center;">Available actions:<br /></div>
+	<div id="combo" style="width: 75%; margin: auto; text-align: center;">Combos available:
+		<select id="scombo"></select>
+		<button id="changecombo" class="btn btn-1" style="padding: 5px 10px; margin: 5px 10px;" onclick="ClickButton('combo');">&lt;-- Change</button></div>
 	<div style="margin: auto; text-align: center;">
 		<textarea id="results" style="width: 670px; height: 300px;"></textarea>
 	</div>

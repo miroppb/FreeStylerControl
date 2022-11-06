@@ -67,9 +67,15 @@ namespace FSControl.Controllers
                         }
                         break;
                     case "actions":
+                        List<string> combo = new List<string>();
+                        foreach (var prop in typeof(Commands).GetFields())
+                        {
+                            if (prop.FieldType.BaseType!.FullName == "System.Array")
+                                combo.Add(prop.Name);
+                        }
                         ret = new
                         {
-                            actions = new Dictionary<string, string>()
+                            actions = new Dictionary<string, object>()
                             {
                                 {
                                     "toggleall", "Toggle All"
@@ -86,6 +92,9 @@ namespace FSControl.Controllers
                                 {
                                     "sundaylights", "Sunday Lights"
                                 },
+                                {
+                                    "combo", combo
+                                }
                             }
                         };
                         break;
@@ -95,6 +104,12 @@ namespace FSControl.Controllers
                         r.Close();
                         ret = lst.TakeLast(50).ToList();
                         break;
+                }
+                if (_action.StartsWith("combo"))
+                {
+                    string val = _action.Replace("combo", "");
+                    object? cmd = typeof(Commands).GetField("LIGHTS_" + val)?.GetValue(this);
+                    Program.frm?.ChangeCombo((string[])cmd!);
                 }
             }
             catch (Exception ex)
