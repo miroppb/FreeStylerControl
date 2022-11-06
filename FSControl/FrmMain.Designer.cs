@@ -204,7 +204,9 @@
             this.CmbVariations.FormattingEnabled = true;
             this.CmbVariations.Items.AddRange(new object[] {
             "Blue-Purple",
-            "Havest-Yellow"});
+            "Havest-Yellow",
+            "Blue",
+            "Light Blue"});
             this.CmbVariations.Location = new System.Drawing.Point(17, 106);
             this.CmbVariations.Name = "CmbVariations";
             this.CmbVariations.Size = new System.Drawing.Size(121, 23);

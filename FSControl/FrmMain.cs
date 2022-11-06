@@ -89,8 +89,10 @@ namespace FSControl
                 using (TcpClient client = new TcpClient())
                 {
                     IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), PORT_NUM);
-
-                    client.Connect(serverEndPoint);
+                    if (!client.ConnectAsync(serverEndPoint).Wait(1000))
+                    {
+                       return false;
+                    }
                 }
                 return true;
             }
@@ -155,6 +157,26 @@ namespace FSControl
             SendTCPMessage(STAGE_IP, Commands.SELECTGROUP3);
             TxtOutput.Text += "Sent Sunday Colors" + Environment.NewLine;
             libmiroppb.Log("Sent Sunday Colors");
+        }
+
+        public void StageWhite()
+        {
+            //select outside and power on
+            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP1);
+            SendTCPMessage(STAGE_IP, Commands.POWERON_INTENSITY);
+            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP1);
+            //select inside
+            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP2);
+            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP3);
+            //send power on to both groups
+            SendTCPMessage(STAGE_IP, Commands.POWERON_INTENSITY);
+            //set white to full
+            SendTCPMessage(STAGE_IP, Commands.LIGHTSWHITE);
+            //unselect all devices
+            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP2);
+            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP3);
+            TxtOutput.Text += "Sent Stage White" + Environment.NewLine;
+            libmiroppb.Log("Sent Stage White");
         }
 
         private void FrmMain_Resize(object sender, EventArgs e)
@@ -258,7 +280,7 @@ namespace FSControl
                         libmiroppb.Log("Running Blue-Purple lights");
                         foreach (string a in Commands.LIGHTSBLUEPURPLE)
                         {
-                            SendTCPMessage(STAGE_IP, a);
+                            SendTCPMessage(WALL_IP, a);
                         }
                         break;
                     case 1:
@@ -266,7 +288,23 @@ namespace FSControl
                         libmiroppb.Log("Running Harvest-Yellow lights");
                         foreach (string a in Commands.LIGHTSHARVESTYELLOW)
                         {
-                            SendTCPMessage(STAGE_IP, a);
+                            SendTCPMessage(WALL_IP, a);
+                        }
+                        break;
+                    case 2:
+                        //blue
+                        libmiroppb.Log("Running Blue lights");
+                        foreach (string a in Commands.LIGHTSBLUECOMBO)
+                        {
+                            SendTCPMessage(WALL_IP, a);
+                        }
+                        break;
+                    case 3:
+                        //light-blue
+                        libmiroppb.Log("Running Light Blue lights");
+                        foreach (string a in Commands.LIGHTSLIGHTBLUE)
+                        {
+                            SendTCPMessage(WALL_IP, a);
                         }
                         break;
                 }
@@ -288,6 +326,8 @@ namespace FSControl
         static public readonly string LIGHTSRED = "FSOC130220";
 
         static public readonly string[] LIGHTSBLUEPURPLE = { "FSOC130165", "FSOC131135", "FSOC132255" };
+        static public readonly string[] LIGHTSBLUECOMBO = { "FSOC130013", "FSOC131034", "FSOC132255" };
+        static public readonly string[] LIGHTSLIGHTBLUE = { "FSOC130021", "FSOC131243", "FSOC132255" };
         static public readonly string[] LIGHTSHARVESTYELLOW = { "FSOC130254", "FSOC131243", "FSOC132021" };
     }
 }

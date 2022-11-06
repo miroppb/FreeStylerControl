@@ -47,16 +47,47 @@ namespace FSControl.Controllers
                         Program.frm?.SundayLights();
                         ret = new { message = "Sunday Lights sent" };
                         break;
+                    case "stageallwhite":
+                        Program.frm?.StageWhite();
+                        ret = new { message = "Stage White sent" };
+                        break;
                     case "testconnection":
                         bool working = Program.frm!.TestConnection(WALL_IP);
                         bool working2 = Program.frm!.TestConnection(STAGE_IP);
                         if (working && working2)
                             ret = new { message = "Both Freestylers are online" };
                         else
-                            if (!working)
+                        {
+                            if (!working && !working2)
+                                ret = new { message = "Both Freestylers are offline :(" };
+                            else if (!working)
                                 ret = new { message = "Wall Freestyler is offline" };
-                            if (!working2)
+                            else if (!working2)
                                 ret = new { message = "Stage Freestyler is offline" };
+                        }
+                        break;
+                    case "actions":
+                        ret = new
+                        {
+                            actions = new Dictionary<string, string>()
+                            {
+                                {
+                                    "toggleall", "Toggle All"
+                                },
+                                {
+                                    "powerallon", "Power All On"
+                                },
+                                {
+                                    "poweralloff", "Power All Off"
+                                },
+                                {
+                                    "stagewhite", "Stage White"
+                                },
+                                {
+                                    "sundaylights", "Sunday Lights"
+                                },
+                            }
+                        };
                         break;
                     case "history":
                         StreamReader r = new StreamReader(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\FSControl\\log.log");
