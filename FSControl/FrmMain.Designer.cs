@@ -223,6 +223,7 @@
             this.MinimumSize = new System.Drawing.Size(397, 295);
             this.Name = "FrmMain";
             this.Text = "FreeStyler Control";
+            this.Deactivate += new System.EventHandler(this.FrmMain_Deactivate);
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.Resize += new System.EventHandler(this.FrmMain_Resize);
             this.groupBox1.ResumeLayout(false);

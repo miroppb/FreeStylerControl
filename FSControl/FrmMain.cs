@@ -59,7 +59,7 @@ namespace FSControl
         }
 
         /// <summary>
-        /// Send 2 TCP Messages (of bytes) to a specific IP
+        /// Send a TCP Message to a specific IP. Waits after command
         /// </summary>
         /// <param name="ip">IP to send the message to</param>
         /// <param name="message">Message to send</param>
@@ -78,10 +78,71 @@ namespace FSControl
                     clientStream.Flush();
                 }
             }
-
-            Thread.Sleep(500);
         }
 
+        /// <summary>
+        /// Send consecutive TCP Messages to a specific IP.
+        /// </summary>
+        /// <param name="ip">IP to send the message to</param>
+        /// <param name="messages">Messages to send</param>
+        private void SendTCPMessage(string ip, string[] messages)
+        {
+            using (TcpClient client = new TcpClient())
+            {
+                IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), PORT_NUM);
+
+                client.Connect(serverEndPoint);
+
+                using (NetworkStream clientStream = client.GetStream())
+                {
+                    foreach (string message in messages)
+                    {
+                        byte[] buffer = Encoding.UTF8.GetBytes(message);
+                        clientStream.Write(buffer, 0, buffer.Length);
+                        clientStream.Flush();
+                    }
+                }
+            }
+            Thread.Sleep(200);
+        }
+
+        /// <summary>
+        /// Send a TCP Message to a specific IP, and receive a response
+        /// </summary>
+        /// <param name="ip">IP to send the message to</param>
+        /// <param name="message">Messages to send</param>
+        /// <returns></returns>
+        private string? SendAndReadTCPMessage(string ip, string message)
+        {
+            using (TcpClient client = new TcpClient())
+            {
+                IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), PORT_NUM);
+
+                client.Connect(serverEndPoint);
+
+                using (NetworkStream clientStream = client.GetStream())
+                {
+                    byte[] buffer = Encoding.UTF8.GetBytes(message);
+                    clientStream.Write(buffer, 0, buffer.Length);
+                    byte[] data = new byte[1024];
+                    int numBytesRead = clientStream.Read(data, 0, data.Length);
+                    clientStream.Flush();
+                    Thread.Sleep(200);
+                    if (numBytesRead > 0)
+                    {
+                        return Encoding.ASCII.GetString(data, 0, numBytesRead);
+                    }
+                    else
+                        return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Test the connection to a specific IP on PORT_NUM
+        /// </summary>
+        /// <param name="ip">IP to test</param>
+        /// <returns>Boolean of whether or not the connection was successful</returns>
         public bool TestConnection(string ip)
         {
             try
@@ -106,16 +167,22 @@ namespace FSControl
 
         public void ToggleAll()
         {
-            SendTCPMessage(WALL_IP, Commands.SELECTALL);
-            SendTCPMessage(WALL_IP, Commands.SELECTALL2);
-            SendTCPMessage(STAGE_IP, Commands.SELECTALL);
-            SendTCPMessage(STAGE_IP, Commands.SELECTALL2);
+            SendTCPMessage(WALL_IP, new[] { Commands.SELECTALL, Commands.SELECTALL2 });
+            SendTCPMessage(STAGE_IP, new[] { Commands.SELECTALL, Commands.SELECTALL2 });
             TxtOutput.Text += "Sent Toggle All" + Environment.NewLine;
             libmiroppb.Log("Sent Toggle All");
         }
 
         public void PowerAllOn()
         {
+            //First check if all devices are selected. If there are any unselected, select all
+            List<string> devices1 = SendAndReadTCPMessage(WALL_IP, Commands.GROUPSTATUS)!.Split(',').Skip(1).ToList();
+            if (devices1.Any(x => x == "0"))
+                SendTCPMessage(WALL_IP, new string[] { Commands.SELECTALL, Commands.SELECTALL2 });
+            List<string> devices2 = SendAndReadTCPMessage(STAGE_IP, Commands.GROUPSTATUS)!.Split(',').Skip(1).ToList();
+            if (devices1.Any(x => x == "0"))
+                SendTCPMessage(STAGE_IP, new string[] { Commands.SELECTALL, Commands.SELECTALL2 });
+
             SendTCPMessage(WALL_IP, Commands.POWERON_INTENSITY);
             SendTCPMessage(STAGE_IP, Commands.POWERON_INTENSITY);
             TxtOutput.Text += "Sent power on" + Environment.NewLine;
@@ -124,6 +191,15 @@ namespace FSControl
 
         public void PowerAllOff()
         {
+            //First check if all devices are selected. If there are any unselected, select all
+            List<string> devices1 = SendAndReadTCPMessage(WALL_IP, Commands.GROUPSTATUS)!.Split(',').Skip(1).ToList();
+            if (devices1.Any(x => x == "0"))
+                SendTCPMessage(WALL_IP, new string[] { Commands.SELECTALL, Commands.SELECTALL2 });
+
+            List<string> devices2 = SendAndReadTCPMessage(STAGE_IP, Commands.GROUPSTATUS)!.Split(',').Skip(1).ToList();
+            if (devices2.Any(x => x == "0"))
+                SendTCPMessage(STAGE_IP, new string[] { Commands.SELECTALL, Commands.SELECTALL2 });
+
             SendTCPMessage(WALL_IP, Commands.POWEROFF_INTENSITY);
             SendTCPMessage(STAGE_IP, Commands.POWEROFF_INTENSITY);
             TxtOutput.Text += "Sent power off" + Environment.NewLine;
@@ -132,49 +208,32 @@ namespace FSControl
 
         public void SundayLights()
         {
-            //select outside and power on
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP1);
-            SendTCPMessage(STAGE_IP, Commands.POWERON_INTENSITY);
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP1);
-            //select inside
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP2);
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP3);
-            //send power on to both groups
-            SendTCPMessage(STAGE_IP, Commands.POWERON_INTENSITY);
-            //set white to full
-            SendTCPMessage(STAGE_IP, Commands.LIGHTSWHITE);
-            //unselect 3rd device
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP3);
-            //set magenta to 220
-            SendTCPMessage(STAGE_IP, Commands.LIGHTSBLUE);
-            //unselect 2nd device
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP2);
-            //select 3rd device
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP3);
-            //set cyan color to 220
-            SendTCPMessage(STAGE_IP, Commands.LIGHTSRED);
-            //unselecting group 3
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP3);
+            SendTCPMessage(STAGE_IP, new[]
+            {
+                Commands.SELECTGROUP1, Commands.POWERON_INTENSITY, Commands.SELECTGROUP1, //select outside and power on
+                Commands.SELECTGROUP2, Commands.SELECTGROUP3, //select inside
+                Commands.POWERON_INTENSITY, //send power on to both groups
+                Commands.LIGHTSWHITE, //set white to full
+                Commands.SELECTGROUP3, //unselect 3rd device
+                Commands.LIGHTSBLUE, //set cyan to 220
+                Commands.SELECTGROUP2, //unselect 2nd device
+                Commands.SELECTGROUP3, //select 3rd device
+                Commands.LIGHTSRED, //set magenta color to 220
+                Commands.SELECTGROUP3}); //unselecting group 3
             TxtOutput.Text += "Sent Sunday Colors" + Environment.NewLine;
             libmiroppb.Log("Sent Sunday Colors");
         }
 
         public void StageWhite()
         {
-            //select outside and power on
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP1);
-            SendTCPMessage(STAGE_IP, Commands.POWERON_INTENSITY);
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP1);
-            //select inside
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP2);
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP3);
-            //send power on to both groups
-            SendTCPMessage(STAGE_IP, Commands.POWERON_INTENSITY);
-            //set white to full
-            SendTCPMessage(STAGE_IP, Commands.LIGHTSWHITE);
-            //unselect all devices
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP2);
-            SendTCPMessage(STAGE_IP, Commands.SELECTGROUP3);
+            SendTCPMessage(STAGE_IP, new[]
+            {
+                Commands.SELECTGROUP1, Commands.POWERON_INTENSITY, Commands.SELECTGROUP1, //select outside and power on
+                Commands.SELECTGROUP2, Commands.SELECTGROUP3, //select inside
+                Commands.POWERON_INTENSITY, //send power on to both groups
+                Commands.LIGHTSWHITE, //set white to full
+                Commands.SELECTGROUP2, Commands.SELECTGROUP3 //unselect all devices
+            });
             TxtOutput.Text += "Sent Stage White" + Environment.NewLine;
             libmiroppb.Log("Sent Stage White");
         }
@@ -298,6 +357,11 @@ namespace FSControl
             CmbVariations.Items.Clear();
             CmbVariations.Items.AddRange(combo.ToArray());
         }
+
+        private void FrmMain_Deactivate(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
     }
 
     public static class Commands
@@ -312,6 +376,8 @@ namespace FSControl
         static public readonly string LIGHTSWHITE = "FSOC583255";
         static public readonly string LIGHTSBLUE = "FSOC132220";
         static public readonly string LIGHTSRED = "FSOC130220";
+
+        static public readonly string GROUPSTATUS = "FSBC023000";
 
         static public readonly string[] LIGHTS_BLUE_PURPLE = { "FSOC130165", "FSOC131135", "FSOC132255" };
         static public readonly string[] LIGHTS_BLUE_COMBO = { "FSOC130013", "FSOC131034", "FSOC132255" };
