@@ -103,7 +103,6 @@ namespace FSControl
                     }
                 }
             }
-            Thread.Sleep(200);
         }
 
         /// <summary>
@@ -228,11 +227,12 @@ namespace FSControl
         {
             SendTCPMessage(STAGE_IP, new[]
             {
-                Commands.SELECTGROUP1, Commands.POWERON_INTENSITY, Commands.SELECTGROUP1, //select outside and power on
+                Commands.SELECTGROUP1,  //select outside
                 Commands.SELECTGROUP2, Commands.SELECTGROUP3, //select inside
                 Commands.POWERON_INTENSITY, //send power on to both groups
+                Commands.LIGHTSREDOFF, Commands.LIGHTSBLUEOFF, //turn off red and blue lights
                 Commands.LIGHTSWHITE, //set white to full
-                Commands.SELECTGROUP2, Commands.SELECTGROUP3 //unselect all devices
+                Commands.SELECTGROUP1, Commands.SELECTGROUP2, Commands.SELECTGROUP3 //unselect all devices
             });
             TxtOutput.Text += "Sent Stage White" + Environment.NewLine;
             libmiroppb.Log("Sent Stage White");
@@ -340,10 +340,7 @@ namespace FSControl
 
         public void ChangeCombo(string[] name)
         {
-            foreach (string a in name)
-            {
-                SendTCPMessage(WALL_IP, a);
-            }
+            SendTCPMessage(WALL_IP, name);
         }
 
         private void FrmMain_Load(object sender, EventArgs e)
@@ -356,32 +353,19 @@ namespace FSControl
             }
             CmbVariations.Items.Clear();
             CmbVariations.Items.AddRange(combo.ToArray());
+            HideMe();
+        }
+
+        private async void HideMe()
+        {
+            WindowState = FormWindowState.Minimized;
+            await Task.Delay(500);
+            Close();
         }
 
         private void FrmMain_Deactivate(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }
-    }
-
-    public static class Commands
-    {
-        static public readonly string SELECTALL = "FSOC000255";
-        static public readonly string SELECTALL2 = "FSOC000000";
-        static public readonly string POWERON_INTENSITY = "FSOC138255";
-        static public readonly string POWEROFF_INTENSITY = "FSOC138000";
-        static public readonly string SELECTGROUP1 = "FSOC034255";
-        static public readonly string SELECTGROUP2 = "FSOC035255";
-        static public readonly string SELECTGROUP3 = "FSOC036255";
-        static public readonly string LIGHTSWHITE = "FSOC583255";
-        static public readonly string LIGHTSBLUE = "FSOC132220";
-        static public readonly string LIGHTSRED = "FSOC130220";
-
-        static public readonly string GROUPSTATUS = "FSBC023000";
-
-        static public readonly string[] LIGHTS_BLUE_PURPLE = { "FSOC130165", "FSOC131135", "FSOC132255" };
-        static public readonly string[] LIGHTS_BLUE_COMBO = { "FSOC130013", "FSOC131034", "FSOC132255" };
-        static public readonly string[] LIGHTS_LIGHT_BLUE = { "FSOC130021", "FSOC131243", "FSOC132255" };
-        static public readonly string[] LIGHTS_HARVEST_YELLOW = { "FSOC130254", "FSOC131243", "FSOC132021" };
     }
 }

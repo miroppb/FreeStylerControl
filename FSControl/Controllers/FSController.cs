@@ -31,10 +31,6 @@ namespace FSControl.Controllers
             {
                 switch (_action)
                 {
-                    case "toggleall":
-                        Program.frm?.ToggleAll();
-                        ret = new { message = "Toggle All sent" };
-                        break;
                     case "powerallon":
                         Program.frm?.PowerAllOn();
                         ret = new { message = "Power All On sent" };
@@ -78,16 +74,13 @@ namespace FSControl.Controllers
                             actions = new Dictionary<string, object>()
                             {
                                 {
-                                    "toggleall", "Toggle All"
-                                },
-                                {
                                     "powerallon", "Power All On"
                                 },
                                 {
                                     "poweralloff", "Power All Off"
                                 },
                                 {
-                                    "stagewhite", "Stage White"
+                                    "stageallwhite", "Stage White"
                                 },
                                 {
                                     "sundaylights", "Sunday Lights"
