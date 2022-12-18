@@ -360,7 +360,7 @@ namespace FSControl
         {
             WindowState = FormWindowState.Minimized;
             await Task.Delay(500);
-            Close();
+            Hide();
         }
 
         private void FrmMain_Deactivate(object sender, EventArgs e)
