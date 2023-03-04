@@ -1,6 +1,6 @@
 using Dapper;
 using miroppb;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;

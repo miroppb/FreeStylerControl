@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using Dapper;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using Microsoft.AspNetCore.Mvc;
 using Isopoh.Cryptography.Argon2;
 using miroppb;
