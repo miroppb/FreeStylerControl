@@ -48,19 +48,9 @@ namespace FSControl.Controllers
                         ret = new { message = "Stage White sent" };
                         break;
                     case "testconnection":
-                        bool working = Program.frm!.TestConnection(WALL_IP);
-                        bool working2 = Program.frm!.TestConnection(STAGE_IP);
-                        if (working && working2)
-                            ret = new { message = "Both Freestylers are online" };
-                        else
-                        {
-                            if (!working && !working2)
-                                ret = new { message = "Both Freestylers are offline :(" };
-                            else if (!working)
-                                ret = new { message = "Wall Freestyler is offline" };
-                            else if (!working2)
-                                ret = new { message = "Stage Freestyler is offline" };
-                        }
+                        bool wall = Program.frm!.TestConnection(WALL_IP);
+                        bool stage = Program.frm!.TestConnection(STAGE_IP);
+                        ret = new { wall, stage };
                         break;
                     case "actions":
                         List<string> combo = new List<string>();
