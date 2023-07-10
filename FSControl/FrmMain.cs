@@ -303,6 +303,10 @@ namespace FSControl
 
         private void timerSchedule_Tick(object sender, EventArgs e)
         {
+            if (!TestConnection(WALL_IP) && !TestConnection(STAGE_IP) )
+            {
+                return; //both are offline
+            }
             foreach (ClSchedule a in Actions)
             {
                 if (DateTime.Now.DayOfWeek == a.day && DateTime.Now.ToShortTimeString() == a.time.ToShortTimeString() && a.action == ScheduleActions.TurnAllOn)
